@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="ru" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@DEADBAPE</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&amp;family=Roboto+Mono:wght@300;400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Oswald', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #ffffff;
+      color: #000000;
+      overflow: hidden;
+    }
+
+    .main-wrapper {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .main-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Animated background grid */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(#000000 1px, transparent 1px),
+        linear-gradient(90deg, #000000 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.03;
+      animation: gridMove 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes gridMove {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(50px, 50px);
+      }
+    }
+
+    /* Floating geometric shapes */
+    .shapes-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .shape {
+      position: absolute;
+      background: #000000;
+      opacity: 0.05;
+    }
+
+    .shape-1 {
+      width: 200px;
+      height: 200px;
+      top: 10%;
+      right: 15%;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      animation: float1 15s ease-in-out infinite;
+    }
+
+    .shape-2 {
+      width: 150px;
+      height: 150px;
+      bottom: 20%;
+      right: 5%;
+      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+      animation: float2 12s ease-in-out infinite;
+    }
+
+    .shape-3 {
+      width: 180px;
+      height: 180px;
+      top: 60%;
+      left: 10%;
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+      animation: float3 18s ease-in-out infinite;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-30px, 30px) rotate(45deg); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(20px, -20px) rotate(-30deg); }
+    }
+
+    @keyframes float3 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-20px, -30px) rotate(20deg); }
+    }
+
+    /* Content container */
+    .content-wrapper {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 40px 40px;
+      min-height: 70%;
+    }
+
+    .content {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    /* Tagline */
+    .tagline {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 0.2s forwards;
+    }
+
+    /* Animated title */
+    .title {
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .title-line {
+      display: block;
+      position: relative;
+      animation: slideInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+      transform: translateY(100px);
+    }
+
+    .title-line:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .title-line:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    @keyframes slideInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Glitch effect on title */
+    .title-line::before,
+    .title-line::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+
+    .title-line:hover::before {
+      animation: glitch1 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+      color: #000000;
+      z-index: -1;
+    }
+
+    .title-line:hover::after {
+      animation: glitch2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+      color: #000000;
+      z-index: -2;
+    }
+
+    @keyframes glitch1 {
+      0%, 100% { transform: translate(0); opacity: 0; }
+      33% { transform: translate(-2px, 2px); opacity: 0.3; }
+      66% { transform: translate(2px, -2px); opacity: 0.3; }
+    }
+
+    @keyframes glitch2 {
+      0%, 100% { transform: translate(0); opacity: 0; }
+      33% { transform: translate(2px, -2px); opacity: 0.3; }
+      66% { transform: translate(-2px, 2px); opacity: 0.3; }
+    }
+
+    /* Description */
+    .description {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      max-width: 600px;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 0.5s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Buttons Container */
+    .buttons-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 0.7s forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 36px;
+      background: #000000;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 2px solid #000000;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: -1;
+    }
+
+    .btn:hover {
+      color: #000000;
+      background: #ffffff;
+    }
+
+    .btn:hover::before {
+      left: 0;
+    }
+
+    .btn-arrow {
+      display: inline-block;
+      font-size: 18px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn:hover .btn-arrow {
+      transform: translateX(6px);
+    }
+
+    /* Corner accents */
+    .corner-accent {
+      position: fixed;
+      background: #000000;
+      z-index: 5;
+    }
+
+    .corner-top-left {
+      top: 0;
+      left: 0;
+      width: 100px;
+      height: 2px;
+      animation: expandWidth 1s ease-out 0.8s forwards;
+      transform-origin: left;
+      transform: scaleX(0);
+    }
+
+    .corner-top-left::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100px;
+      background: #000000;
+      animation: expandHeight 1s ease-out 1s forwards;
+      transform-origin: top;
+      transform: scaleY(0);
+    }
+
+    @keyframes expandWidth {
+      to { transform: scaleX(1); }
+    }
+
+    @keyframes expandHeight {
+      to { transform: scaleY(1); }
+    }
+
+    /* Image carousel */
+    .carousel-section {
+      position: relative;
+      z-index: 10;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .carousel-track {
+      display: flex;
+      animation: scroll 30s linear infinite;
+      will-change: transform;
+    }
+
+    .carousel-item {
+      flex: 0 0 350px;
+      height: 350px;
+      margin: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: grayscale(100%);
+      transition: filter 0.3s ease;
+    }
+
+    .carousel-item:hover img {
+      filter: grayscale(0%);
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-2400px);
+      }
+    }
+
+    /* Footer */
+    .footer {
+      position: relative;
+      z-index: 10;
+      padding: 80px 40px 40px;
+      border-top: 2px solid #000000;
+    }
+
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 60px;
+    }
+
+    .footer-section h3 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    .footer-section p,
+    .footer-section a {
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: #000000;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 12px;
+      font-family: 'Roboto Mono', monospace;
+      letter-spacing: 1px;
+      transition: transform 0.2s ease;
+    }
+
+    .footer-section a:hover {
+      transform: translateX(8px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .title {
+        font-size: 40px;
+      }
+
+      .description {
+        font-size: 16px;
+      }
+
+      .tagline {
+        font-size: 12px;
+      }
+
+      .content-wrapper {
+        padding: 60px 24px 24px;
+        min-height: 60%;
+      }
+
+      .btn {
+        padding: 16px 28px;
+        font-size: 12px;
+        gap: 12px;
+      }
+
+      .buttons-container {
+        gap: 12px;
+      }
+
+      .shape-1, .shape-2, .shape-3 {
+        opacity: 0.03;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .footer {
+        padding: 60px 24px 24px;
+      }
+
+      .carousel-item {
+        flex: 0 0 250px;
+        height: 250px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="main-wrapper"><!-- Background elements -->
+   <div class="bg-grid"></div>
+   <div class="shapes-container">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+   </div><!-- Corner accents -->
+   <div class="corner-accent corner-top-left"></div><!-- Main content -->
+   <div class="content-wrapper">
+    <div class="content">
+     <div class="tagline" id="tagline">
+      Презентация 
+     </div>
+     <h1 class="title"><span class="title-line" data-text="Культура">Культура</span> <span class="title-line" data-text="Твери">Твери</span></h1>
+     <p class="description" id="description">Тверь — древний русский город на Волге, известный своей богатой историей и уютной архитектурой.</p>
+<div class="buttons-container">
+    <!-- Кнопка PDF -->
+    <a href="./main.pdf" class="btn" target="_blank" rel="noopener">
+        <span class="button-text">Презентация</span>
+        <span class="btn-arrow">→</span>
+    </a>
+
+    <!-- Кнопка Word -->
+    <a href="./info.pdf" class="btn" target="_blank" rel="noopener">
+        <span class="button-text">Доклад</span>
+        <span class="btn-arrow">→</span>
+    </a>
+</div>
+     </div>
+    </div>
+   </div><!-- Image Carousel -->
+   <div class="carousel-section">
+    <div class="carousel-track">
+     <div class="carousel-item"><img src="./1.jpg" alt="Architecture 1" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./2.png" alt="Architecture 2" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./3.jpg" alt="Architecture 3" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./4.jpg" alt="Architecture 4" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./5.jpg" alt="Architecture 5" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./6.jpg" alt="Architecture 6" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div><!-- Duplicate for seamless loop -->
+     <div class="carousel-item"><img src="./7.jpg" alt="Architecture 1" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./1.jpg" alt="Architecture 1" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./2.png" alt="Architecture 2" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./3.jpg" alt="Architecture 3" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./4.jpg" alt="Architecture 4" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./5.jpg" alt="Architecture 5" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+     <div class="carousel-item"><img src="./6.jpg" alt="Architecture 6" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div><!-- Duplicate for seamless loop -->
+     <div class="carousel-item"><img src="./7.jpg" alt="Architecture 1" onerror="this.src=''; this.alt='Image failed to load'; this.style.display='none';">
+     </div>
+    
+    </div>
+   </div><!-- Footer -->
+   <footer class="footer">
+    <div class="footer-grid">
+     <div class="footer-section">
+      <h3>Организатор</h3><a href="mailto:francheza.898503@gmail.com">Екатерина Курникова</a>
+      <p>Москва, Россия</p>
+     </div>
+     <div class="footer-section">
+      <h3>О Проекте</h3>
+      <p>Краткий рассказ</p>
+      <p>Про Тверь.</p>
+     </div>
+     <div class="footer-section">
+      <h3>Важная информация</h3>
+      <p>Вся информация взята из публичных заявлений</p>
+      <p>И информации на Википедии.</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "Современный\nДизайн",
+      tagline_text: "Цифровое Портфолио",
+      description_text: "Минималистичный подход к веб-дизайну с острыми формами, чистыми линиями и плавными анимациями. Простота и функциональность в каждом пикселе.",
+      button_text: "Открыть PDF",
+      word_button_text: "Открыть Word",
+      background_color: "#ffffff",
+      text_color: "#000000",
+      accent_color: "#000000",
+      font_family: "Oswald",
+      font_size: 16
+    };
+
+    async function onConfigChange(config) {
+      const titleElement = document.querySelector('.title');
+      const taglineElement = document.getElementById('tagline');
+      const descriptionElement = document.getElementById('description');
+      const buttonTextElement = document.getElementById('buttonText');
+      const wordButtonTextElement = document.getElementById('wordButtonText');
+
+      // Update tagline
+      taglineElement.textContent = config.tagline_text || defaultConfig.tagline_text;
+
+      // Update title
+      const titleLines = (config.main_title || defaultConfig.main_title).split('\n');
+      titleElement.innerHTML = titleLines.map(line => 
+        `<span class="title-line" data-text="${line}">${line}</span>`
+      ).join('');
+
+      // Update description
+      descriptionElement.textContent = config.description_text || defaultConfig.description_text;
+
+      // Update button texts
+      buttonTextElement.textContent = config.button_text || defaultConfig.button_text;
+      wordButtonTextElement.textContent = config.word_button_text || defaultConfig.word_button_text;
+
+      // Update colors
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+
+      document.body.style.background = bgColor;
+      document.body.style.color = textColor;
+      
+      document.querySelectorAll('.corner-accent, .corner-accent::after').forEach(el => {
+        el.style.background = accentColor;
+      });
+      
+      document.querySelectorAll('.shape').forEach(el => {
+        el.style.background = accentColor;
+      });
+
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.style.background = accentColor;
+        btn.style.borderColor = accentColor;
+      });
+
+      // Update font
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+
+      // Update font size
+      const baseSize = config.font_size || defaultConfig.font_size;
+      titleElement.style.fontSize = `${baseSize * 4}px`;
+      descriptionElement.style.fontSize = `${baseSize * 1.125}px`;
+      taglineElement.style.fontSize = `${baseSize * 0.875}px`;
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.style.fontSize = `${baseSize * 0.875}px`;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["tagline_text", config.tagline_text || defaultConfig.tagline_text],
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["description_text", config.description_text || defaultConfig.description_text],
+          ["button_text", config.button_text || defaultConfig.button_text],
+          ["word_button_text", config.word_button_text || defaultConfig.word_button_text]
+        ])
+      });
+    }
+
+    // Button click handlers
+    document.getElementById('pdfButton').addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('PDF button clicked');
+    });
+
+    document.getElementById('wordButton').addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('Word button clicked');
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9aaf9bada60fd344',t:'MTc2NTIzMTk4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
